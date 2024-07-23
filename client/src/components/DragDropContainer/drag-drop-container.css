@@ -1,0 +1,31 @@
+.app {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.container-wrapper {
+    display: flex;
+    justify-content: space-around;
+    width: 100%;
+}
+
+.container {
+    border: 1px solid #bdbdbd8a;
+    padding: 10px;
+    border-radius: 5px;
+    margin: 10px;
+    width: 30%;
+    box-shadow: 0px 2px 2px lightgray;
+}
+
+.title{
+    font-weight: 600;
+    font-family: revert;
+    text-align: left;
+    font-size: medium;
+    background-color: #5c96f2;
+    padding: 5px;
+    color: white;
+    margin-bottom: 10px;
+}

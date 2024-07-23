@@ -1,0 +1,23 @@
+.drag-item{
+    opacity: 1;
+        background-color: #bed2f7;
+        min-height: 120px;
+        border: 2px solid transparent;
+        border-radius: 5px;
+        margin: 4px;
+}
+
+.title{
+    font-weight: 600;
+    font-size: large;
+}
+
+.date{
+    font-weight: 400;
+    font-size: medium;
+}
+
+.description{
+    font-weight: 400;
+    font-size: medium;
+}

@@ -1,0 +1,11 @@
+.searchBar{
+    width: 100%;
+    display: flex;
+}
+
+.titles{
+    font-weight: 600;
+    font-size: large;
+    padding: 5px;
+    margin: 5px;
+}
