@@ -58,8 +58,13 @@ const DragDropContainer = () => {
 
         }
         const fetchData = async () => {
+        const token = localStorage.getItem('authToken');
           try {
-            const response = await api.get('/task/get');
+            const response = await api.get('/task/get', {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            });
             setData(response.data);
             categorizedData(response.data);
 
