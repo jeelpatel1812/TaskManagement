@@ -3,17 +3,19 @@ const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const app = express();
-const port = 8081;
 const taskRoutes = require('./routes/task');
 const userRoutes = require('./routes/user');
-const JWT_SECRET = 'qwertyuioplkjhgaSsas#^%$XFCaa';
+
 const jwt = require('jsonwebtoken');
+const dotenv = require('dotenv');
+
+dotenv.config();
 // Middleware to parse JSON
 app.use(express.json());
 // Use CORS middleware
 app.use(cors());
 // Connect to MongoDB
-mongoose.connect('mongodb+srv://jeelpatel1212:jeelpatel1212@cluster0.ipz1skx.mongodb.net/TaskManagement?retryWrites=true&w=majority', {
+mongoose.connect(process.env.MONGO_URI, {
   useNewUrlParser: true,
   useUnifiedTopology: true
 })
@@ -29,8 +31,7 @@ const authenticateJWT = (req, res, next) => {
   }
 
   try {
-    const decoded = jwt.verify(token, JWT_SECRET);
-    console.log("checl aee", decoded)
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
       req.user = decoded;
       next();
   } catch (error) {
@@ -39,10 +40,10 @@ const authenticateJWT = (req, res, next) => {
 };
 
 // Use routes
-app.use('/task',authenticateJWT, taskRoutes);
-app.use('/user', userRoutes);
+app.use('/api/task',authenticateJWT, taskRoutes);
+app.use('/api/user', userRoutes);
 
 // Start the server 
-app.listen(port, () => {
-  console.log(`Server is running on http://localhost:${port}`);
+app.listen(process.env.PORT, () => {
+  console.log(`Server is running on http://localhost:${process.env.PORT}`);
 });

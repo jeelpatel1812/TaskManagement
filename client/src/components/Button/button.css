@@ -6,7 +6,8 @@
     outline: 0;
     border: 0; 
     text-transform: uppercase;
-    margin: 10px 0px;
+    margin: 10px;
+    width: 100px;
     cursor: pointer;
     box-shadow: 0px 2px 2px lightgray;
     transition: ease background-color 250ms;
