@@ -11,11 +11,14 @@ import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
 import api from '../../api'
 import { connect } from 'react-redux'
-
+import './tasks-dashboard.css'
 
 export const TasksDashboard = (props) => {
 
   const [newTaskTaker,  setNewTaskTaker] = useState(false);
+  const [title,  setTitle] = useState("");
+  const [description,  setDescription] = useState("");
+  const [dueDate,  setDueDate] = useState("");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
@@ -31,9 +34,10 @@ export const TasksDashboard = (props) => {
     try {
       const response = await api.post('/task/add',
       {
-        title: 'hasd',
-        description: 'mmzx',
+        title: title,
+        description: description,
         createdAt: new Date(),
+        dueDate: dueDate,
         status: 'todo'
       },
       {
@@ -57,10 +61,36 @@ export const TasksDashboard = (props) => {
         <Header/>
         <Button onClick={handleToOpen}>Add Task</Button>
         <Dialog open={newTaskTaker} onClose={handleToClose}>
-                <DialogTitle>{"How are you?"}</DialogTitle>
+                <DialogTitle>Task</DialogTitle>
                 <DialogContent>
                     <DialogContentText>
-                        I am Good, Hope the same for you!
+                      <div className="form-group">
+                        <label>Title</label>
+                        <input
+                          type="string"
+                          value={title}
+                          onChange={(e) => setTitle(e.target.value)}
+                          required
+                        />
+                      </div>
+                      <div className="form-group">
+                        <label>Description</label>
+                        <input
+                          type="text"
+                          value={description}
+                          onChange={(e) => setDescription(e.target.value)}
+                          required
+                        />
+                      </div>
+                      <div className="form-group">
+                        <label>Due date</label>
+                        <input
+                          type="date"
+                          value={dueDate}
+                          onChange={(e) => setDueDate(e.target.value)}
+                          required
+                        />
+                      </div>
                     </DialogContentText>
                 </DialogContent>
                 <DialogActions>

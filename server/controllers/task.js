@@ -2,7 +2,7 @@
 const Task = require('../models/task.js');
 const handleGetTasks = async (req, res) => {
     try {
-      const tasks = await Task.find();
+      const tasks = await Task.find({createdBy: req.userId});
       res.json(tasks);
     } catch (err) {
       res.status(500).json({ message: err.message });
@@ -13,8 +13,10 @@ const handleAddNewTask = async (req, res) => {
     const task = new Task({
       title: req.body.title,
       description: req.body.description,
+      status: req.body.status,
+      createdBy: req.userId,
       createdAt: new Date(),
-      status: req.body.status
+      dueDate: new Date(),
     });
   
     try {

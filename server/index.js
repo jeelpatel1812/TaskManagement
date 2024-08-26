@@ -5,7 +5,7 @@ const cors = require('cors');
 const app = express();
 const taskRoutes = require('./routes/task');
 const userRoutes = require('./routes/user');
-
+const User = require('./models/user.js');
 const jwt = require('jsonwebtoken');
 const dotenv = require('dotenv');
 
@@ -23,7 +23,7 @@ mongoose.connect(process.env.MONGO_URI, {
 .catch(err => console.error('Could not connect to MongoDB', err));
 
 
-const authenticateJWT = (req, res, next) => {
+const authenticateJWT = async (req, res, next) => {
   const token = req.header('Authorization')?.split(' ')[1];
 
   if (!token) {
@@ -32,8 +32,8 @@ const authenticateJWT = (req, res, next) => {
 
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
-      req.user = decoded;
-      next();
+    req.userId = await User.findOne({email: decoded.email}).select('_id');
+    next();
   } catch (error) {
       res.status(400).json({ message: 'Invalid token.' });
   }
