@@ -1,18 +1,35 @@
 import React,{useState} from 'react';
 import { useDrag } from 'react-dnd';
 import './drag-item.css'
-import MoreVertIcon from '@mui/icons-material/MoreVert';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import api from '../../api'; // Import the axios instance
 import TaskTaker from '../TaskTaker/task-taker';
-const DragItem = ({ item }) => {
+import DragItemMenu from '../DragItemMenu/dragItemMenu';
+const DragItem = ({ item, handleDeleteTask }) => {
 
     const [openTaskTaker,  setOpenTaskTaker] = useState(false);
-    const handleCloseTaskTaker = () =>{
-    setOpenTaskTaker(false);
-    }
-    const handleOpenTaskTaker = () =>{
+    const handleUpdateTask = () =>{
         setOpenTaskTaker(true);
+    }
+    const handleCloseTaskTaker = () =>{
+        setOpenTaskTaker(false);
+    }
+    const handleDeleteTaskFunc = async(task) =>{
+        handleDeleteTask(item._id);
+        // const token = localStorage.getItem('authToken');
+        // try{
+        //     const response = await api.delete(`/task/delete/${item._id}`,
+        //     {   
+        //         headers: {
+        //             Authorization: `Bearer ${token}`
+        //         },
+        //     });
+        //     console.log("check response", response);
+        // }
+        // catch(err){
+
+        // }
+        
     }
 
     const [{ isDragging }, drag] = useDrag(() => ({
@@ -33,15 +50,20 @@ const DragItem = ({ item }) => {
         >
             <div className='title'>
                 {item.title}
-                <MoreVertIcon onClick={handleOpenTaskTaker}style={{height: '20px', position: 'absolute', right: '5px'}}/>
+                <DragItemMenu 
+                    handleUpdate={handleUpdateTask}
+                    handleDelete={(item)=> handleDeleteTaskFunc(item)}
+                />
             </div>
             <div className='description'>{item.description}</div>
             <div className='dateContainer' style={{position: 'absolute', bottom: '5px', left:'5px'}}>
                 <AccessTimeIcon style={{height: '15px', marginBottom: '-1px'}}/>
                 {item.dueDate.substring(0,10)}
             </div>
-            <TaskTaker isOpen={openTaskTaker} handleClose={handleCloseTaskTaker}/>
+      
             <div>
+
+            <TaskTaker isOpen={openTaskTaker} handleClose={handleCloseTaskTaker} taskDetails={item} isUpdate={true}/>
 
             </div>
         </div>

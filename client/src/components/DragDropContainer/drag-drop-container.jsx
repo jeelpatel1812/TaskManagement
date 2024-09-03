@@ -25,73 +25,108 @@ const DragDropContainer = () => {
         // { id: 'DONE', items: [{ id: 'item-22', title: 'Item 3', description:'this is fuckign non sencence.', dateAndTime:'20241218' }] },
     ]);
 
-    
+    const fetchData = async () => {
+        if(data.length) return;
+        console.log("called once", data)
+        const token = localStorage.getItem('authToken');
+        try {
+        const response = await api.get('/task/get', {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        });
+        setData(response.data);
+        categorizedData(response.data);
+
+        } catch (error) {
+        setError(error.message);
+        } finally {
+        setLoading(false);
+        }
+    };
+
+    const categorizedData = (dataContainer, item, target) => {
+        const tempTodoData = [];
+        const tempInProgressData = [];
+        const tempDoneData = [];
+
+        dataContainer.map((data)=>{
+            if(data._id == item?._id) {
+                if(target == 'TODO') tempTodoData.push(data);
+                else if(target == 'IN PROGRESS') tempInProgressData.push(data);
+                else tempDoneData.push(data);
+            }
+            else if(data.status === 'todo') tempTodoData.push(data);
+            else if(data.status === 'inprocess') tempInProgressData.push(data);
+            else if(data.status === 'done') tempDoneData.push(data);
+        })
+
+        updateContainerById('TODO', tempTodoData)
+        updateContainerById('IN PROGRESS', tempInProgressData)
+        updateContainerById('DONE', tempDoneData)
+
+        if(target){
+            try{
+                const token = localStorage.getItem('authToken');
+                const response = api.patch(`/task/updateStatus/${item?._id}`,
+                {
+                    status: target == 'TODO' ? 'todo' : ( target ==  'IN PROCESS' ? 'inprocess' : 'done')
+                },
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`
+                    }
+                    
+                });
+            }
+            catch(err) {
+                console.log("Error: ", err);
+            }
+            finally{
+                fetchData();
+            }
+        }
+
+    }
+
+    const updateContainerById = (id, newItems) => {
+        setContainers(prevContainers =>
+          prevContainers.map(container =>
+            container.id === id ? { ...container, items: newItems } : container
+          )
+        );
+      };
 
     useEffect(() => {
         // Replace with your API URL
         setTodoData([]);
         setInProgressData([]);
         setDoneData([]);
-
-        const updateContainerById = (id, newItems) => {
-            setContainers(prevContainers =>
-              prevContainers.map(container =>
-                container.id === id ? { ...container, items: newItems } : container
-              )
-            );
-          };
-
-        const categorizedData = (dataContainer) => {
-            const tempTodoData = [];
-            const tempInProgressData = [];
-            const tempDoneData = [];
-
-            dataContainer.map((data)=>{
-                if(data.status === 'todo') tempTodoData.push(data);
-                else if(data.status === 'inprocess') tempInProgressData.push(data);
-                else if(data.status === 'done') tempDoneData.push(data);
-            })
-
-            updateContainerById('TODO', tempTodoData)
-            updateContainerById('IN PROGRESS', tempInProgressData)
-            updateContainerById('DONE', tempDoneData)
-
-        }
-        const fetchData = async () => {
-        const token = localStorage.getItem('authToken');
-          try {
-            const response = await api.get('/task/get', {
-                headers: {
-                    Authorization: `Bearer ${token}`
-                }
-            });
-            setData(response.data);
-            categorizedData(response.data);
-
-          } catch (error) {
-            setError(error.message);
-          } finally {
-            setLoading(false);
-          }
-        };
-    
         fetchData();
       }, []);
 
     const handleDrop = (item, containerId) => {
-        setContainers((prevContainers) => {
-            const updatedContainers = prevContainers.map((container) => {
-                if (container.items.find((i) => i.id === item.id)) {
-                    return { ...container, items: container.items.filter((i) => i.id !== item.id) };
-                }
-                if (container.id === containerId) {
-                    return { ...container, items: [...container.items, item] };
-                }
-                return container;
-            });
-            return updatedContainers;
-        });
+        
+        categorizedData(data, item, containerId);
+        fetchData();
     };
+
+    const handleDeleteTask = async(taskId) =>{
+        const token = localStorage.getItem('authToken');
+        try{
+            const response = await api.delete(`/task/delete/${taskId}`,
+            {   
+                headers: {
+                    Authorization: `Bearer ${token}`
+                },
+            });
+            console.log("check response", response);
+        }
+        catch(err){
+
+        }
+        
+    }
 
     if (loading) return <p>Loading...</p>;
     if (error) return <p>Error: {error}</p>;
@@ -105,7 +140,7 @@ const DragDropContainer = () => {
                             <div className='title'>{container.id}</div>
                             <DropZone containerId={container.id} onDrop={handleDrop}>
                                 {container.items.map((item) => (
-                                    <DragItem key={item.id} item={item} />
+                                    <DragItem key={item.id} item={item} handleDeleteTask={handleDeleteTask}/>
                                 ))}
                             </DropZone>
                         </div>

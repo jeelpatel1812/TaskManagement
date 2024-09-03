@@ -10,9 +10,9 @@ import Button from '../Button/button';
 function TaskTaker(props) {
 
     const [openTaskTaker,  setOpenTaskTaker] = useState(true);
-    const [title,  setTitle] = useState("");
-    const [description,  setDescription] = useState("");
-    const [dueDate,  setDueDate] = useState("");
+    const [title,  setTitle] = useState(props.taskDetails?.title || "");
+    const [description,  setDescription] = useState(props.taskDetails?.description || "");
+    const [dueDate,  setDueDate] = useState(props.taskDetails?.dueDate || "");
   
     const handleToClose = () =>{
       props.handleClose();
@@ -39,6 +39,31 @@ function TaskTaker(props) {
         // setError(error.message);
       } finally {
         // setLoading(false);
+        handleToClose();
+      }
+    }
+
+    const handleUpdateTask = async(taskId) =>{
+      const token = localStorage.getItem('authToken');
+      try {
+        const response = await api.put(`/task/update/${props.taskDetails?._id}`,
+        {
+          title: title,
+          description: description,
+          createdAt: new Date(),
+          dueDate: dueDate,
+          status: 'todo'
+        },
+        {
+          headers: {
+              Authorization: `Bearer ${token}`
+          },
+        });
+  
+      } catch (error) {
+        // setError(error.message);
+      } finally {
+          handleToClose();
       }
     }
     return (
@@ -76,9 +101,9 @@ function TaskTaker(props) {
               </DialogContentText>
           </DialogContent>
           <DialogActions>
-              <Button onClick={handleAddTask}
+              <Button onClick={props.isUpdate ? handleUpdateTask : handleAddTask}
                   color="primary" autoFocus>
-                  Add
+                  {props.isUpdate ? 'Update' : 'Add'}
               </Button>
           </DialogActions>
         </Dialog>
