@@ -40,5 +40,10 @@
 
 .description{
     font-weight: 400;
+    max-height: 45px;
+    overflow: hidden;
+    text-overflow: ellipsis;
     font-size: medium;
+    text-align: left;
+    margin-left: 10px;
 }

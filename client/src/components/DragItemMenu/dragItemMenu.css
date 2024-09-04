@@ -4,6 +4,7 @@
     width: 80px;
     border: 0.5px solid grey;
     border-radius: 5%;
+    z-index: 100;
 }
 .menuItem, .menuItemDelete {
     height: 30px;

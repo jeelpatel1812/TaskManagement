@@ -27,7 +27,7 @@ function TaskTaker(props) {
           description: description,
           createdAt: new Date(),
           dueDate: dueDate,
-          status: 'todo'
+          status: 'TODO'
         },
         {
           headers: {
@@ -52,7 +52,7 @@ function TaskTaker(props) {
           description: description,
           createdAt: new Date(),
           dueDate: dueDate,
-          status: 'todo'
+          status: 'TODO'
         },
         {
           headers: {

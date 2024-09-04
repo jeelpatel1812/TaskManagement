@@ -20,13 +20,13 @@ const DragDropContainer = () => {
 
     const [containers, setContainers] = useState([
         { id: 'TODO', items: [] },
-        { id: 'IN PROGRESS', items: [] },
+        { id: 'IN PROCESS', items: [] },
         { id: 'DONE', items: [] },
         // { id: 'DONE', items: [{ id: 'item-22', title: 'Item 3', description:'this is fuckign non sencence.', dateAndTime:'20241218' }] },
     ]);
 
     const fetchData = async () => {
-        if(data.length) return;
+        // if(data.length) return;
         console.log("called once", data)
         const token = localStorage.getItem('authToken');
         try {
@@ -53,16 +53,16 @@ const DragDropContainer = () => {
         dataContainer.map((data)=>{
             if(data._id == item?._id) {
                 if(target == 'TODO') tempTodoData.push(data);
-                else if(target == 'IN PROGRESS') tempInProgressData.push(data);
+                else if(target == 'IN PROCESS') tempInProgressData.push(data);
                 else tempDoneData.push(data);
             }
-            else if(data.status === 'todo') tempTodoData.push(data);
-            else if(data.status === 'inprocess') tempInProgressData.push(data);
-            else if(data.status === 'done') tempDoneData.push(data);
+            else if(data.status === 'TODO') tempTodoData.push(data);
+            else if(data.status === 'IN PROCESS') tempInProgressData.push(data);
+            else if(data.status === 'DONE') tempDoneData.push(data);
         })
 
         updateContainerById('TODO', tempTodoData)
-        updateContainerById('IN PROGRESS', tempInProgressData)
+        updateContainerById('IN PROCESS', tempInProgressData)
         updateContainerById('DONE', tempDoneData)
 
         if(target){
@@ -70,7 +70,7 @@ const DragDropContainer = () => {
                 const token = localStorage.getItem('authToken');
                 const response = api.patch(`/task/updateStatus/${item?._id}`,
                 {
-                    status: target == 'TODO' ? 'todo' : ( target ==  'IN PROCESS' ? 'inprocess' : 'done')
+                    status: target == 'TODO' ? 'TODO' : ( target ==  'IN PROCESS' ? 'IN PROCESS' : 'DONE')
                 },
                 {
                     headers: {
@@ -83,7 +83,11 @@ const DragDropContainer = () => {
                 console.log("Error: ", err);
             }
             finally{
-                fetchData();
+                const updatedData = [];
+                containers.map((categoryItem)=>{
+                    categoryItem?.items.map((item)=> updatedData.push(item));
+                })
+                setData(updatedData);
             }
         }
 
@@ -108,7 +112,6 @@ const DragDropContainer = () => {
     const handleDrop = (item, containerId) => {
         
         categorizedData(data, item, containerId);
-        fetchData();
     };
 
     const handleDeleteTask = async(taskId) =>{

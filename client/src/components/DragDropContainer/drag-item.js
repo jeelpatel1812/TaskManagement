@@ -16,20 +16,6 @@ const DragItem = ({ item, handleDeleteTask }) => {
     }
     const handleDeleteTaskFunc = async(task) =>{
         handleDeleteTask(item._id);
-        // const token = localStorage.getItem('authToken');
-        // try{
-        //     const response = await api.delete(`/task/delete/${item._id}`,
-        //     {   
-        //         headers: {
-        //             Authorization: `Bearer ${token}`
-        //         },
-        //     });
-        //     console.log("check response", response);
-        // }
-        // catch(err){
-
-        // }
-        
     }
 
     const [{ isDragging }, drag] = useDrag(() => ({
@@ -56,8 +42,9 @@ const DragItem = ({ item, handleDeleteTask }) => {
                 />
             </div>
             <div className='description'>{item.description}</div>
-            <div className='dateContainer' style={{position: 'absolute', bottom: '5px', left:'5px'}}>
-                <AccessTimeIcon style={{height: '15px', marginBottom: '-1px'}}/>
+            <div className='dateContainer' style={{position: 'absolute', bottom: '5px', left:'10px'}}>
+                {/* <AccessTimeIcon style={{height: '15px', marginBottom: '-2px'}}/> */}
+                <b>Due date : </b> 
                 {item.dueDate.substring(0,10)}
             </div>
       

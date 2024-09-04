@@ -49,13 +49,14 @@ const handleUpdateTask = async (req, res) => {
 
 const handleUpdateTaskStatus = async (req, res) => {
     const taskId = req.params.id;
-  
     try {
       const newTask = await Task.findByIdAndUpdate({_id: taskId},
         {
-        status: req.body.status
-      });
-      res.status(201).json(newTask);
+          status: req.body.status
+        },
+        { new: true });
+        res.status(201).json(newTask);
+        console.log("check patch id", req.body.status, newTask)
     } catch (err) {
       res.status(400).json({ message: err.message });
     }
