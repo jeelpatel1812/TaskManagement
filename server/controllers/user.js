@@ -37,13 +37,14 @@ const handleUserLogin = async(req, res) =>{
     if (!user) {
     return res.status(400).json({ message: "User not found"  });
     }
-  
+    const createdAt = user.createdAt
+    console.log('userrrrrr', user);
     const passwordCompare = await bcrypt.compare(password, user.password);
     if (!passwordCompare) {
         return res.status(400).json({ message: "Invalid Credentials"});
     }   
     const token = jwt.sign({email}, JWT_SECRET, { expiresIn: '1h' });
-    res.status(201).json({ message: "Login Successfully.", token, email});
+    res.status(201).json({ message: "Login Successfully.", token, email, createdAt});
 }
 
 module.exports  = {handleGetUser, handleAddNewUser, handleUserLogin};

@@ -18,9 +18,10 @@ const Login = () => {
             password
         });
 
-        const { token, email: userId } = response.data;
+        const { token, email: userId, createdAt } = response.data;
         localStorage.setItem('authToken', token);
         localStorage.setItem('user', JSON.stringify(userId));
+        localStorage.setItem('createdAt', JSON.stringify(createdAt));
         console.log('Logged in successfully');
 
         setIsLoggedIn(true);
@@ -47,6 +48,7 @@ const Login = () => {
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             required
+            autocomplete="email"
           />
         </div>
         <div className="form-group">
@@ -58,7 +60,13 @@ const Login = () => {
             required
           />
         </div>
-        <button type="submit">Login</button>
+
+        <div style={{textAlign: 'center', marginTop: '10px'}}>
+          <button type="submit" style={{width:'35%', margin:'10px 110px'}}>Login</button>
+          
+          <a href='/signup' >Create a new account</a>
+        </div>
+
       </form>
     </div>
   );

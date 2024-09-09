@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
-
+const { Schema } = mongoose;
+const OrganizationModel = require('./organization.js');
 const userSchema = new mongoose.Schema({
   name: { type: String, required: true},
   email: {
@@ -11,6 +12,11 @@ const userSchema = new mongoose.Schema({
   password:{
     type: String,
     required: true,
+  },
+  organization :{ 
+    type: Schema.Types.ObjectId, 
+    required: true, 
+    ref: OrganizationModel
   },
   createdAt: { type: Date, default: new Date() }
 });

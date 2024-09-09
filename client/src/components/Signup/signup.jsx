@@ -59,7 +59,11 @@ const Signup = () => {
             required
           />
         </div>
-        <button type="submit">Create Account</button>
+        <div style={{textAlign: 'center', marginTop: '10px'}}>
+          <button type="submit" style={{width:'35%', margin:'10px 110px'}}>Create Account</button>
+          
+          <a href='/login' >Already have an account !!</a>
+        </div>
       </form>
     </div>
   );

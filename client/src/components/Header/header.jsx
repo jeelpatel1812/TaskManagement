@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import './header.css';
+import PersonIcon from '@mui/icons-material/Person';
 
 const Header = ({ isLoggedIn, handleLogout }) => {
     return (
@@ -22,6 +23,11 @@ const Header = ({ isLoggedIn, handleLogout }) => {
                 ) : (
                     <Link to="/login" className="auth-button">Login</Link>
                 )}
+            </div>
+            <div>
+                
+                <Link to="/userProfile" className="" style={{color:'white'}}><PersonIcon/></Link>
+                
             </div>
         </header>
     );

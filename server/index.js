@@ -5,6 +5,7 @@ const cors = require('cors');
 const app = express();
 const taskRoutes = require('./routes/task');
 const userRoutes = require('./routes/user');
+const organizationRoutes = require('./routes/organization');
 const User = require('./models/user.js');
 const jwt = require('jsonwebtoken');
 const dotenv = require('dotenv');
@@ -42,6 +43,7 @@ const authenticateJWT = async (req, res, next) => {
 // Use routes
 app.use('/api/task',authenticateJWT, taskRoutes);
 app.use('/api/user', userRoutes);
+app.use('/api/organization',authenticateJWT,  organizationRoutes);
 
 // Start the server 
 app.listen(process.env.PORT, () => {

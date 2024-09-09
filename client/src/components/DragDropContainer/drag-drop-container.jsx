@@ -52,6 +52,7 @@ const DragDropContainer = () => {
 
         dataContainer.map((data)=>{
             if(data._id == item?._id) {
+                data.status = target;
                 if(target == 'TODO') tempTodoData.push(data);
                 else if(target == 'IN PROCESS') tempInProgressData.push(data);
                 else tempDoneData.push(data);
@@ -142,8 +143,8 @@ const DragDropContainer = () => {
                         <div key={container.id} className="container">
                             <div className='title'>{container.id}</div>
                             <DropZone containerId={container.id} onDrop={handleDrop}>
-                                {container.items.map((item) => (
-                                    <DragItem key={item.id} item={item} handleDeleteTask={handleDeleteTask}/>
+                                {container.items.map((item, index) => (
+                                    <DragItem key={item.id || index} item={item} handleDeleteTask={handleDeleteTask}/>
                                 ))}
                             </DropZone>
                         </div>
